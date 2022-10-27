@@ -11,7 +11,7 @@ data "aws_ami" "amazon-linux-2" {
 }
 
 module "ec2-mongo" {
-  source = "../modules/ec2-ebs"
+  source = "./modules/ec2-ebs"
   vpc_id = var.vpc_id
   ami_id = data.aws_ami.amazon-linux-2.id
   key_name = var.key_name
