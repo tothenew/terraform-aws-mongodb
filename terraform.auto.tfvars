@@ -12,5 +12,5 @@ root_volume_size     = "10"
 security_groups      = [""]
 vpc_id               = ""
 common_tags = {
-    "Feature" : "application"
+  "Feature" : "application"
 }
