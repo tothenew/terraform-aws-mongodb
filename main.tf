@@ -18,7 +18,7 @@ module "ec2-mongo" {
     instance_type           = var.instance_type
     iam_instance_profile    = var.iam_instance_profile
     security_groups         = var.security_groups
-    user_data_script        = file("init.sh")
+    user_data_script        = file("userdata.sh")
     subnet_id               = var.subnet_id
     ebs_optimized           = var.ebs_optimized
     disable_api_termination = var.disable_api_termination
