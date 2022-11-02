@@ -1,12 +1,12 @@
 
 module "ec2-mongo" {
     source                  = "../"
-    vpc_id                  = "vpc-01f1488876c4a803e"
-    key_name                = "sparsh-nv"
+    vpc_id                  = "vpc-9999xxxxxxxxxxxxx"
+    key_name                = "xxxx"
     instance_type           = "t2.micro"
-    iam_instance_profile    = "ssm-role"
-    security_groups         = ["sg-0a967f4fa886231f5"]
-    subnet_id               = "subnet-0b45bc874e97793e4"
+    iam_instance_profile    = "xxxx"
+    security_groups         = ["xxxxxxx"]
+    subnet_id               = "subnet-9999xxxxx"
     ebs_optimized           = false
     disable_api_termination = true
     disable_api_stop        = true
