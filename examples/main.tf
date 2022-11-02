@@ -5,7 +5,7 @@ module "ec2-mongo" {
     key_name                = "sparsh-nv"
     instance_type           = "t2.micro"
     iam_instance_profile    = "ssm-role"
-    security_groups         = ["sg-0a967f4fa886231f5 "]
+    security_groups         = ["sg-0a967f4fa886231f5"]
     subnet_id               = "subnet-0b45bc874e97793e4"
     ebs_optimized           = false
     disable_api_termination = true
@@ -15,9 +15,10 @@ module "ec2-mongo" {
     encrypted               = true
     volume_type             = "gp3"
     root_volume_size        = "10"
-    project_name_prefix       = "dev-test"
+    project_name_prefix     = "dev-test"
 
-    common_tags = {
-    "Feature" : "application"
+    common_tags             = {
+      "Feature" : "application"
+      "Environment" = "dev"
     }
 }
