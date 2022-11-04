@@ -1,6 +1,6 @@
 
 module "ec2-mongo" {
-    source                  = "../"
+    source                  = "git::https://github.com/tothenew/terraform-aws-mongodb.git"
     vpc_id                  = "vpc-9999xxxxxxxxxxxxx"
     key_name                = "xxxx"
     instance_type           = "t2.micro"
