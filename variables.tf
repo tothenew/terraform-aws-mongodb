@@ -61,14 +61,14 @@ variable "encrypted" {
 
 variable "volume_type" {
     description = "Volume type for EC2 instance default latest type"
-    type    = string
-    default = "gp3"
+    type        = string
+    default     = "gp3"
 }
 
 variable "root_volume_size" {
     description = "Root volume size of the EC2 instance"
-    type = number
-    default = 50
+    type        = number
+    default     = 50
 }
 
 variable "disable_api_stop" {
@@ -79,6 +79,6 @@ variable "disable_api_stop" {
 
 variable "source_dest_check" {
     description = "Source destination Check. Used for NAT or VPNs."
-    type    = bool
-    default = true
+    type        = bool
+    default     = true
 }
