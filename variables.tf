@@ -6,13 +6,13 @@ variable "subnet_id" {
 variable "instance_type" {
     description = "The type of instance to start"
     type        = string
-    default		= "t3a.medium"
+    default     = "t3a.medium"
 }
 
 variable "project_name_prefix" {
     description = "A string value to describe prefix of all the resources"
     type        = string
-    default		= "dev-tothenew"
+    default     = "dev-tothenew"
 }
 
 variable "iam_instance_profile" {
