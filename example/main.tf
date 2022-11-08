@@ -1,4 +1,4 @@
-module "ec2-jenkins" {
+module "ec2-mongodb" {
     source                    = "git::https://github.com/tothenew/terraform-aws-mongodb.git"
     key_name                  = "tothenew"
     iam_instance_profile      = "tothenew"
