@@ -6,11 +6,13 @@ variable "subnet_id" {
 variable "instance_type" {
     description = "The type of instance to start"
     type        = string
+    default		= "t3a.medium"
 }
 
 variable "project_name_prefix" {
     description = "A string value to describe prefix of all the resources"
     type        = string
+    default		= "dev-tothenew"
 }
 
 variable "iam_instance_profile" {
@@ -32,6 +34,7 @@ variable "disable_api_termination" {
 variable "ebs_optimized" {
     description = "If true, the launched EC2 instance will be EBS-optimized"
     type        = bool
+    default     = true
 }
 
 variable "security_groups" {
@@ -57,17 +60,15 @@ variable "encrypted" {
 }
 
 variable "volume_type" {
+    description = "Volume type for EC2 instance default latest type"
     type    = string
     default = "gp3"
 }
 
 variable "root_volume_size" {
+    description = "Root volume size of the EC2 instance"
     type = number
-}
-
-variable "vpc_id" {
-    description = "A string value for VPC ID"
-    type        = string
+    default = 50
 }
 
 variable "disable_api_stop" {
@@ -77,16 +78,7 @@ variable "disable_api_stop" {
 }
 
 variable "source_dest_check" {
+    description = "Source destination Check. Used for NAT or VPNs."
     type    = bool
     default = true
-}
-
-variable "environment" {
-    type    = string
-    default = "dev"
-}
-
-variable "project" {
-    type    = string
-    default = "test"
 }
