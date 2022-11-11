@@ -13,6 +13,9 @@ data "aws_ami" "amazon-linux-2" {
 
   data "template_file" "user_data" {
     template = file("${path.module}/userdata.sh")
+    vars = {
+      "VERSION" = var.mongo_version
+    }
   }
 
   resource "aws_instance" "ec2" {

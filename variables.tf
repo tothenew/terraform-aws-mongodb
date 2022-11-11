@@ -8,7 +8,11 @@ variable "instance_type" {
     type        = string
     default     = "t3a.medium"
 }
-
+variable "mongo_version" {
+    description = "The version of mongodb"
+    type        = string
+    default     = "5.0"
+}
 variable "project_name_prefix" {
     description = "A string value to describe prefix of all the resources"
     type        = string
