@@ -29,6 +29,22 @@ public subnets, and Nat gateway
     - Private Subnets: MongoDB nodes and NAT gateway
 
 
+## Usage
+
+```
+module mongodb {
+  source = "git::https://github.com/tothenew/terraform-aws-mongodb.git"
+  region = "<default region>"
+  secondary_node_type = "<secondary node type>"
+  primary_node_type = "<primary node type>"
+  environment = "<environment name>"
+  vpc_id     = "<vpc id>"
+  vpc_cidr_block = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0>"
+  mongo_subnet_ids = "<private subnet ids>"
+  jumpbox_subnet_ids = "<public subnet ids>"
+  mongo_database = "<sample database name>"
+}
+```
 
 ## Requirements
 
