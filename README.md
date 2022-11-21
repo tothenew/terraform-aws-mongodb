@@ -15,7 +15,7 @@ The following content needed to be created and managed:
 ## Introduction
 This repository allows creating MongoDB ReplicaSet in AWS EC2 instances. It includes the following resources:
 
-- Jumpbox Instance: 
+- Jumpbox Instance (*Optional - If terraform is invoked from Local): 
     - To access our MongoDB servers
     - To copy replication and cluster configutration files to MongoDB servers
 - Primary MongoDB Instance
