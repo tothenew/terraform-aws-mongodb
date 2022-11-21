@@ -39,7 +39,7 @@ module mongodb {
   primary_node_type = "<primary node type>"
   environment = "<environment name>"
   vpc_id     = "<vpc id>"
-  vpc_cidr_block = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0>"
+  jump_box_ssh_allowed_from = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0 format 54.12.12.54/32>"
   mongo_subnet_ids = "<private subnet ids>"
   jumpbox_subnet_ids = "<public subnet ids>"
   mongo_database = "<sample database name>"

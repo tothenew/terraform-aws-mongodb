@@ -73,7 +73,7 @@ resource "aws_security_group" "jumpbox_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr_block}"]
+    cidr_blocks = ["${var.jump_box_ssh_allowed_from}"]
   }
   egress {
     from_port   = 0
@@ -145,7 +145,7 @@ resource "aws_instance" "mongo_secondary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = aws_instance.jumpbox.private_ip
       bastion_user = "ubuntu"
     }
   }
@@ -158,7 +158,7 @@ resource "aws_instance" "mongo_secondary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = aws_instance.jumpbox.private_ip
       bastion_user = "ubuntu"
     }
   }
@@ -191,7 +191,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = aws_instance.jumpbox.private_ip
       bastion_user = "ubuntu"
     }
   }
@@ -204,7 +204,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = aws_instance.jumpbox.private_ip
       bastion_user = "ubuntu"
     }
   }
@@ -217,7 +217,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = aws_instance.jumpbox.private_ip
       bastion_user = "ubuntu"
     }
   }
@@ -229,19 +229,19 @@ resource "aws_security_group" "mongo_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr_block}"]
+    cidr_blocks = aws_instance.jumpbox.private_ip
   }
   ingress {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr_block}"]
+    cidr_blocks = aws_instance.jumpbox.private_ip
   }
   ingress {
     from_port   = -1
     to_port     = -1
     protocol = "icmp"
-    cidr_blocks        = ["${var.vpc_cidr_block}"]
+    cidr_blocks        = aws_instance.jumpbox.private_ip
   }
   egress {
     from_port   = 0
