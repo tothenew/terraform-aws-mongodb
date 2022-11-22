@@ -132,7 +132,7 @@ resource "aws_instance" "mongo_secondary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.public_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
@@ -145,7 +145,7 @@ resource "aws_instance" "mongo_secondary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.private_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
@@ -158,7 +158,7 @@ resource "aws_instance" "mongo_secondary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.private_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
@@ -191,7 +191,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.private_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
@@ -204,7 +204,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.private_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
@@ -217,7 +217,7 @@ resource "aws_instance" "mongo_primary" {
       host         = "${self.private_ip}"
       agent        = false
       private_key  = "${file("~/.ssh/id_rsa")}"
-      bastion_host = aws_instance.jumpbox.private_ip
+      bastion_host = "${aws_instance.jumpbox.private_ip}"
       bastion_user = "ubuntu"
     }
   }
