@@ -37,7 +37,6 @@ module mongodb {
   region = "<default region>"
   secondary_node_type = "<secondary node type>"
   primary_node_type = "<primary node type>"
-  environment = "<environment name>"
   vpc_id     = "<vpc id>"
   mongo_subnet_ids = "<private subnet ids>"
   jumpbox_subnet_ids = "<public subnet ids>"
