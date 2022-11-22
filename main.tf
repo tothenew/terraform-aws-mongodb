@@ -229,19 +229,19 @@ resource "aws_security_group" "mongo_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = aws_instance.jumpbox.private_ip
+    cidr_blocks = "${aws_instance.jumpbox.private_ip}"
   }
   ingress {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = aws_instance.jumpbox.private_ip
+    cidr_blocks = "${aws_instance.jumpbox.private_ip}"
   }
   ingress {
     from_port   = -1
     to_port     = -1
     protocol = "icmp"
-    cidr_blocks        = aws_instance.jumpbox.private_ip
+    cidr_blocks = "${aws_instance.jumpbox.private_ip}"
   }
   egress {
     from_port   = 0

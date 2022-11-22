@@ -1,44 +1,22 @@
 variable "region" {}
-variable "profile" {
-  default = "default"
-}
 variable "secondary_node_type" {}
-variable "primary_node_type" {
-  default = "t2.nano"
-}
-variable "jumpbox_instance_type" {}
-variable "instance_user" {
-  default = "ubuntu"
-}
-variable "key_name" {
-  default = "mongodb"
-}
+variable "primary_node_type" {}
 variable "vpc_id" {}
+variable "mongo_database" {}
 variable "mongo_subnet_ids" {type = map}
 variable "jumpbox_subnet_ids" {type = map}
-variable "vpc_cidr_block" {
-  default = "0.0.0.0/0"
-}
-variable "environment" {
-  default = "dev"
-}
-variable "replica_set_name" {
-  default = "mongoRs"
-}
-variable "mongo_username" {
-  default = "admin"
-}
-variable "mongo_database" {}
-variable "num_secondary_nodes" {
-  default = 2
-}
+variable "profile" {default = "default"}
+variable "jumpbox_instance_type" {default = "t2.nano"}
+variable "instance_user" {default = "ubuntu"}
+variable "key_name" {default = "mongodb"}
+variable "environment" {default = "dev"}
+variable "replica_set_name" {default = "mongoRs"}
+variable "mongo_username" {default = "admin"}
+variable "num_secondary_nodes" {default = 2}
+variable "domain_name" {default = ".test.internal"}
+variable "ssm_parameter_prefix" {default = "MongoDB"}
+variable "var.jump_box_ssh_allowed_from" {default = "0.0.0.0/0"}
 variable "custom_domain" { 
-  type = bool 
+  type = bool
   default = false
-}
-variable "domain_name" { 
-  default = ".test.internal" 
-}
-variable "ssm_parameter_prefix" {
-  default = "MongoDB"
 }

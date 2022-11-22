@@ -39,11 +39,29 @@ module mongodb {
   primary_node_type = "<primary node type>"
   environment = "<environment name>"
   vpc_id     = "<vpc id>"
+<<<<<<< HEAD
   jump_box_ssh_allowed_from = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0 format 54.12.12.54/32>"
+=======
+>>>>>>> e8aadf197c0bc0a9500ede49c75b0c2d7d695e63
   mongo_subnet_ids = "<private subnet ids>"
   jumpbox_subnet_ids = "<public subnet ids>"
   mongo_database = "<sample database name>"
+  jump_box_ssh_allowed_from = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0>"
 }
+```
+
+> However, below properties can also be passed as custom parameters, otherwise will be picked from variables.tf as default
+
+```
+profile
+instance_user
+key_name
+environment
+replica_set_name
+mongo_username
+num_secondary_nodes
+domain_name
+ssm_parameter_prefix
 ```
 
 ## Requirements
