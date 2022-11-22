@@ -1,6 +1,6 @@
 variable "region" {}
 variable "profile" {
-  default =   
+  default = "default"
 }
 variable "secondary_node_type" {}
 variable "primary_node_type" {
