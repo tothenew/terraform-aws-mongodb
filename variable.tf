@@ -15,7 +15,7 @@ variable "mongo_username" {default = "admin"}
 variable "num_secondary_nodes" {default = 2}
 variable "domain_name" {default = ".test.internal"}
 variable "ssm_parameter_prefix" {default = "MongoDB"}
-variable "var.jump_box_ssh_allowed_from" {default = "0.0.0.0/0"}
+variable "jump_box_ssh_allowed_from" {default = "0.0.0.0/0"}
 variable "custom_domain" { 
   type = bool
   default = false
