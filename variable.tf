@@ -3,6 +3,7 @@ variable "secondary_node_type" {}
 variable "primary_node_type" {}
 variable "vpc_id" {}
 variable "mongo_database" {}
+variable "jump_box_ssh_allowed_from" {}
 variable "mongo_subnet_ids" {type = map}
 variable "jumpbox_subnet_ids" {type = map}
 variable "profile" {default = "default"}
@@ -15,7 +16,6 @@ variable "mongo_username" {default = "admin"}
 variable "num_secondary_nodes" {default = 2}
 variable "domain_name" {default = ".test.internal"}
 variable "ssm_parameter_prefix" {default = "MongoDB"}
-variable "jump_box_ssh_allowed_from" {default = "0.0.0.0/0"}
 variable "custom_domain" { 
   type = bool
   default = false

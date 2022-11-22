@@ -13,4 +13,5 @@ module mongodb {
       "us-east-1" = "subnet-076791df8d148a81a"
     }
     mongo_database = "admin"
+    jump_box_ssh_allowed_from = "0.0.0.0/0"
 }
