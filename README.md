@@ -41,7 +41,6 @@ module mongodb {
   mongo_subnet_ids = "<private subnet ids>"
   jumpbox_subnet_ids = "<public subnet ids>"
   mongo_database = "<sample database name>"
-  jump_box_ssh_allowed_from = "<Local IP for Bastion otherwise bastion is opened for 0.0.0.0>"
 }
 ```
 
