@@ -4,6 +4,13 @@ provider "aws" {
 }
 
 #############################
+# Fetch terraform server IP
+#############################
+data "http" "terraform_server_ip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
+#############################
 # Key Pair
 #############################
 resource "aws_key_pair" "ssh_key" {
@@ -73,7 +80,7 @@ resource "aws_security_group" "jumpbox_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${var.jump_box_ssh_allowed_from}"]
+    cidr_blocks = ["${chomp(data.http.terraform_server_ip.body)}/32"]
   }
   egress {
     from_port   = 0

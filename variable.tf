@@ -3,7 +3,6 @@ variable "secondary_node_type" {}
 variable "primary_node_type" {}
 variable "vpc_id" {}
 variable "mongo_database" {}
-variable "jump_box_ssh_allowed_from" {}
 variable "mongo_subnet_ids" {type = map}
 variable "jumpbox_subnet_ids" {type = map}
 variable "profile" {default = "default"}
