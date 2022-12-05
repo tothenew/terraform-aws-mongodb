@@ -11,11 +11,25 @@ data "http" "terraform_server_ip" {
 }
 
 #############################
+# Fetch VPC CIDR
+#############################
+data "aws_vpc" "mongodb_vpc" {
+  id = "${var.vpc_id}"
+}
+
+#############################
 # Key Pair
 #############################
+resource "tls_private_key" "ssh_private_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 resource "aws_key_pair" "ssh_key" {
   key_name   = "${var.key_name}"
-  public_key = "${file("~/.ssh/id_rsa.pub")}"
+  public_key = tls_private_key.ssh_private_key.public_key_openssh
+  provisioner "local-exec" { # This will create "mongodb.pem" where the terraform will run!!
+    command = "rm -f /tmp/mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > /tmp/mongodb.pem"
+  }
 }
 
 #############################
@@ -51,7 +65,7 @@ resource "aws_instance" "jumpbox" {
   ami                         = "ami-0149b2da6ceec4bb0"
   instance_type               = "${var.jumpbox_instance_type}"
   key_name                    = "${var.key_name}"
-  subnet_id                   = "${lookup(var.jumpbox_subnet_ids, var.region)}"
+  subnet_id                   = "${var.jumpbox_subnet_id}"
   associate_public_ip_address = true
   user_data                   = filebase64("${path.module}/jumpbox_userdata.sh")
   vpc_security_group_ids      = ["${aws_security_group.jumpbox_sg.id}"]
@@ -61,17 +75,17 @@ resource "aws_instance" "jumpbox" {
   tags = {
     Name = "Jumpbox"
   }
-  provisioner "file" {
-    source      = "~/.ssh/id_rsa"
-    destination = "/home/ubuntu/id_rsa"
-    connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = "${self.public_ip}"
-      agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
-    }
-  }
+  #provisioner "file" {
+  #  source      = "${file("/tmp/mongodb.pem")}"
+  #  destination = "/home/ubuntu/mongodb.pem"
+  #  connection {
+  #    type         = "ssh"
+  #    user         = "ubuntu"
+  #    host         = "${self.public_ip}"
+  #    agent        = false
+  #    private_key  = tls_private_key.ssh_private_key.private_key_pem
+  #  }
+  #}
 }
 resource "aws_security_group" "jumpbox_sg" {
   name   = "Jumpbox_SG"
@@ -80,7 +94,7 @@ resource "aws_security_group" "jumpbox_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(data.http.terraform_server_ip.body)}/32"]
+    cidr_blocks = ["${chomp(data.http.terraform_server_ip.response_body)}/32"]
   }
   egress {
     from_port   = 0
@@ -119,7 +133,7 @@ resource "aws_instance" "mongo_secondary" {
   ami                    = "ami-0149b2da6ceec4bb0"
   instance_type          = "${var.secondary_node_type}"
   key_name               = "${var.key_name}"
-  subnet_id              = "${lookup(var.mongo_subnet_ids, var.region)}"
+  subnet_id              = "${var.mongo_subnet_id}"
   user_data              = "${data.template_file.userdata.rendered}"
   vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
   iam_instance_profile   = "${aws_iam_instance_profile.mongo-instance-profile.name}"
@@ -138,7 +152,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -151,7 +165,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -164,7 +178,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -178,7 +192,7 @@ resource "aws_instance" "mongo_primary" {
   ami                    = "ami-0149b2da6ceec4bb0"
   instance_type          = "${var.primary_node_type}"
   key_name               = "${var.key_name}"
-  subnet_id              = "${lookup(var.mongo_subnet_ids, var.region)}"
+  subnet_id              = "${var.mongo_subnet_id}"
   user_data              = "${data.template_file.userdata.rendered}"
   vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
   iam_instance_profile   = "${aws_iam_instance_profile.mongo-instance-profile.name}"
@@ -197,7 +211,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -210,7 +224,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -223,7 +237,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = "${self.private_ip}"
       agent        = false
-      private_key  = "${file("~/.ssh/id_rsa")}"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = "${aws_instance.jumpbox.public_ip}"
       bastion_user = "ubuntu"
     }
@@ -236,19 +250,19 @@ resource "aws_security_group" "mongo_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_instance.jumpbox.private_ip}/32"]
+    cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
   }
   ingress {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = ["${aws_instance.jumpbox.private_ip}/32"]
+    cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
   }
   ingress {
     from_port   = -1
     to_port     = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_instance.jumpbox.private_ip}/32"]
+    cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
   }
   egress {
     from_port   = 0

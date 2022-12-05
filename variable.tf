@@ -3,8 +3,8 @@ variable "secondary_node_type" {}
 variable "primary_node_type" {}
 variable "vpc_id" {}
 variable "mongo_database" {}
-variable "mongo_subnet_ids" {type = map}
-variable "jumpbox_subnet_ids" {type = map}
+variable "mongo_subnet_id" {}
+variable "jumpbox_subnet_id" {}
 variable "profile" {default = "default"}
 variable "jumpbox_instance_type" {default = "t2.nano"}
 variable "instance_user" {default = "ubuntu"}
