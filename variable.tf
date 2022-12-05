@@ -5,10 +5,11 @@ variable "vpc_id" {}
 variable "mongo_database" {}
 variable "mongo_subnet_id" {}
 variable "jumpbox_subnet_id" {}
-variable "profile" { default = "default" }
+variable "jumpbox_access_cidr" {}
+variable "key_name" {}
+#variable "profile" { default = "default" }
 variable "jumpbox_instance_type" { default = "t2.nano" }
 variable "instance_user" { default = "ubuntu" }
-variable "key_name" { default = "mongodb" }
 variable "environment" { default = "dev" }
 variable "replica_set_name" { default = "mongoRs" }
 variable "mongo_username" { default = "admin" }
