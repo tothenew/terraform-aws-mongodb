@@ -11,101 +11,74 @@ The following content needed to be created and managed:
  - Example Usages
 
 <!-- BEGIN_TF_DOCS -->
-
-## Introduction
-This repository allows creating MongoDB ReplicaSet in AWS EC2 instances. It includes the following resources:
-
-- Jumpbox Instance (*Optional - If terraform is invoked from Local): 
-    - To access our MongoDB servers
-    - To copy replication and cluster configutration files to MongoDB servers
-- Primary MongoDB Instance
-- Secondary MongoDB Instances (you can define the count of read replicas here. By default, this creates 2 secondary nodes)
-
-## Pre-Requisites
-- AWS CLI must be installed and aws-profile must be already created
-- AWS VPC must be already configured with min. 2 private subnets, 2 
-public subnets, and Nat gateway
-    - Public Subnets: Jumpbox is setup here
-    - Private Subnets: MongoDB nodes and NAT gateway
-
-
-## Usage
-
-```
-module mongodb {
-  source = "git::https://github.com/tothenew/terraform-aws-mongodb.git"
-  region = "<default region>"
-  secondary_node_type = "<secondary node type>"
-  primary_node_type = "<primary node type>"
-  vpc_id     = "<vpc id>"
-  mongo_subnet_ids = "<private subnet ids>"
-  jumpbox_subnet_ids = "<public subnet ids>"
-  mongo_database = "<sample database name>"
-}
-```
-
-> However, below properties can also be passed as custom parameters, otherwise will be picked from variables.tf as default
-
-```
-profile
-instance_user
-key_name
-environment
-replica_set_name
-mongo_username
-num_secondary_nodes
-domain_name
-ssm_parameter_prefix
-```
-
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.72 |
+No requirements.
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.72 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_http"></a> [http](#provider\_http) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_template"></a> [template](#provider\_template) | n/a |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
+
+## Modules
+
+No modules.
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [random_string](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
-| [aws_ssm_parameter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
-| [aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
-| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
-| [aws_iam_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_instance_profile.mongo-instance-profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
+| [aws_iam_role.mongo-role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.ec2-describe-instance-policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_instance.jumpbox](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
+| [aws_instance.mongo_primary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
+| [aws_instance.mongo_secondary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
+| [aws_key_pair.ssh_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
+| [aws_security_group.jumpbox_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_security_group.mongo_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_ssm_parameter.mongodb_admin_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [aws_ssm_parameter.mongodb_admin_password](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [aws_ssm_parameter.mongodb_admin_user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [random_string.autogenerated_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
+| [tls_private_key.ssh_private_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
+| [aws_iam_policy_document.instance-assume-role-policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_vpc.mongodb_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
+| [http_http.terraform_server_ip](https://registry.terraform.io/providers/hashicorp/http/latest/docs/data-sources/http) | data source |
+| [template_file.userdata](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| secondary\_node\_type | Instance type of Slave MongoDB Nodes | `string` | `t2.micro` | yes |
-| primary\_node\_type | Instance type of Master MongoDB Node | `string` | `t2.micro` | yes |
-| jumpbox\_instance\_type | Instance type of Bastion Server| `string` | `t2.nano` | yes |
-| instance\_user | SSH Username | `string` | `ubuntu` | yes |
-| key\_name | pem key file to ssh into servers | `string` | `mongo` | yes |
-| vpc\_id | VPC ID where you want to launch your servers | `string` | `NA` | yes |
-| environment | Environment Tag Name | `string` | `DEV` | yes |
-| mongo\_subnet\_ids | List of Subnet Ids where MongoDB will be running (should be private) | `list` | `NA` | yes |
-| jumpbox\_subnet\_ids | Subnet IDs where Bastion Server will be running (should be public) | `list` | `NA` | yes |
-| vpc\_cidr\_block | This is for Security Group egress rules | `string` | `0.0.0.0/0` | yes |
-| replica\_set\_name | Name of the MongoDB Replicaset which will be created  | `string` | `MongoRs` | yes |
-| mongo\_username | MongoDB Username | `string` | `admin` | yes |
-| mongo\_database | MongoDB Database | `string` | `admin` | yes |
-| num\_secondary\_nodes| Number of Slave MongoDB Nodes | `integer` | `2` | yes |
-| custom\_domain | If "true", then the custom domain name will be used for MongoDB else default Private IPs will be used | `bool` | `flase` | yes |
-| domain\_name | The custom domain name if required | `string` | `n/a` | yes (only if "custom\_domain" is set to true) |
-| ssm\_parameter\_prefix | Prefix for SSM Parameter Key Name | `string` | `MongoDB` | yes |
+| <a name="input_custom_domain"></a> [custom\_domain](#input\_custom\_domain) | n/a | `bool` | `false` | no |
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | n/a | `string` | `".test.internal"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"dev"` | no |
+| <a name="input_instance_user"></a> [instance\_user](#input\_instance\_user) | n/a | `string` | `"ubuntu"` | no |
+| <a name="input_jumpbox_instance_type"></a> [jumpbox\_instance\_type](#input\_jumpbox\_instance\_type) | n/a | `string` | `"t2.nano"` | no |
+| <a name="input_jumpbox_subnet_id"></a> [jumpbox\_subnet\_id](#input\_jumpbox\_subnet\_id) | n/a | `any` | n/a | yes |
+| <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | `"mongodb"` | no |
+| <a name="input_mongo_database"></a> [mongo\_database](#input\_mongo\_database) | n/a | `any` | n/a | yes |
+| <a name="input_mongo_subnet_id"></a> [mongo\_subnet\_id](#input\_mongo\_subnet\_id) | n/a | `any` | n/a | yes |
+| <a name="input_mongo_username"></a> [mongo\_username](#input\_mongo\_username) | n/a | `string` | `"admin"` | no |
+| <a name="input_num_secondary_nodes"></a> [num\_secondary\_nodes](#input\_num\_secondary\_nodes) | n/a | `number` | `2` | no |
+| <a name="input_primary_node_type"></a> [primary\_node\_type](#input\_primary\_node\_type) | n/a | `any` | n/a | yes |
+| <a name="input_profile"></a> [profile](#input\_profile) | n/a | `string` | `"default"` | no |
+| <a name="input_region"></a> [region](#input\_region) | n/a | `any` | n/a | yes |
+| <a name="input_replica_set_name"></a> [replica\_set\_name](#input\_replica\_set\_name) | n/a | `string` | `"mongoRs"` | no |
+| <a name="input_secondary_node_type"></a> [secondary\_node\_type](#input\_secondary\_node\_type) | n/a | `any` | n/a | yes |
+| <a name="input_ssm_parameter_prefix"></a> [ssm\_parameter\_prefix](#input\_ssm\_parameter\_prefix) | n/a | `string` | `"MongoDB"` | no |
+| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | n/a | `any` | n/a | yes |
 
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
 ## Authors
 
 Module managed by [TO THE NEW Pvt. Ltd.](https://github.com/tothenew)
