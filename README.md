@@ -105,7 +105,7 @@ ssm_parameter_prefix
 | custom\_domain | If "true", then the custom domain name will be used for MongoDB else default Private IPs will be used | `bool` | `flase` | yes |
 | domain\_name | The custom domain name if required | `string` | `n/a` | yes (only if "custom\_domain" is set to true) |
 | ssm\_parameter\_prefix | Prefix for SSM Parameter Key Name | `string` | `MongoDB` | yes |
-
+<!-- END_TF_DOCS -->
 ## Authors
 
 Module managed by [TO THE NEW Pvt. Ltd.](https://github.com/tothenew)
