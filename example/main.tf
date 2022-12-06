@@ -7,6 +7,5 @@ module "mongodb" {
   mongo_subnet_id     = "subnet-0569ea294831bb782"
   jumpbox_subnet_id   = "subnet-0b740611c69644d90"
   mongo_database      = "admin"
-  jumpbox_access_cidr = "0.0.0.0/0"
-  key_name = "devops"
+  key_name            = "devops"
 }
