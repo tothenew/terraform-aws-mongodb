@@ -6,9 +6,9 @@ provider "aws" {
 #############################
 # Fetch terraform server IP
 #############################
-#data "http" "terraform_server_ip" {
-#  url = "http://ipv4.icanhazip.com"
-#}
+data "http" "terraform_server_ip" {
+  url = "http://ipv4.icanhazip.com"
+}
 
 #############################
 # Fetch VPC CIDR
@@ -20,17 +20,17 @@ data "aws_vpc" "mongodb_vpc" {
 #############################
 # Key Pair
 #############################
-#resource "tls_private_key" "ssh_private_key" {
-#  algorithm = "RSA"
-#  rsa_bits  = 4096
-#}
-#resource "aws_key_pair" "ssh_key" {
-#  key_name   = var.key_name
-#  public_key = tls_private_key.ssh_private_key.public_key_openssh
-#  provisioner "local-exec" { # This will create "mongodb.pem" where the terraform will run!!
-#    command = "rm -f /tmp/mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > /tmp/mongodb.pem"
-#  }
-#}
+resource "tls_private_key" "ssh_private_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "aws_key_pair" "ssh_key" {
+  key_name   = var.key_name
+  public_key = tls_private_key.ssh_private_key.public_key_openssh
+  provisioner "local-exec" { # This will create "mongodb.pem" where the terraform will run!!
+    command = "rm -f ./mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > ./mongodb.pem"
+  }
+}
 
 #############################
 # Password Generation
@@ -94,8 +94,7 @@ resource "aws_security_group" "jumpbox_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    #cidr_blocks = ["${chomp(data.http.terraform_server_ip.response_body)}/32"]
-    cidr_blocks = ["${var.jumpbox_access_cidr}"]
+    cidr_blocks = ["${chomp(data.http.terraform_server_ip.response_body)}/32"]
   }
   egress {
     from_port   = 0
@@ -153,8 +152,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
@@ -167,8 +165,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
@@ -181,8 +178,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
@@ -215,8 +211,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
@@ -229,8 +224,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
@@ -243,8 +237,7 @@ resource "aws_instance" "mongo_primary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      #private_key  = tls_private_key.ssh_private_key.private_key_pem
-      private_key  = var.key_name
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
       bastion_host = aws_instance.jumpbox.public_ip
       bastion_user = "ubuntu"
     }
