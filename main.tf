@@ -62,7 +62,7 @@ resource "aws_ssm_parameter" "mongodb_admin_db" {
 # Jumpbox Instance
 #############################
 resource "aws_instance" "jumpbox" {
-  ami                         = "ami-0149b2da6ceec4bb0"
+  ami                         = var.jumpbox_ami
   instance_type               = var.jumpbox_instance_type
   key_name                    = var.key_name
   subnet_id                   = var.jumpbox_subnet_id
