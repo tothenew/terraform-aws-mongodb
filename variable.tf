@@ -1,5 +1,5 @@
 variable "region" {}
-variable "jumpbox_ami" { default = "ami=0149b2da6ceec4bb0"  }
+variable "mongo_ami" { default = "ami=0149b2da6ceec4bb0"  }
 variable "secondary_node_type" {}
 variable "primary_node_type" {}
 variable "vpc_id" {}
