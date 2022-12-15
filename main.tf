@@ -62,7 +62,7 @@ resource "aws_ssm_parameter" "mongodb_admin_db" {
 # Jumpbox Instance
 #############################
 resource "aws_instance" "jumpbox" {
-  ami                         = var.jumpbox_ami
+  ami                         = var.mongo_ami
   instance_type               = var.jumpbox_instance_type
   key_name                    = var.key_name
   subnet_id                   = var.jumpbox_subnet_id
@@ -130,7 +130,7 @@ data "template_file" "userdata" {
 #############################
 resource "aws_instance" "mongo_secondary" {
   count                  = var.num_secondary_nodes
-  ami                    = "ami-0149b2da6ceec4bb0"
+  ami                    = var.mongo_ami
   instance_type          = var.secondary_node_type
   key_name               = var.key_name
   subnet_id              = var.mongo_subnet_id
@@ -189,7 +189,7 @@ resource "aws_instance" "mongo_secondary" {
 # Mongo Primary Instances
 #############################
 resource "aws_instance" "mongo_primary" {
-  ami                    = "ami-0149b2da6ceec4bb0"
+  ami                    = var.mongo_ami
   instance_type          = var.primary_node_type
   key_name               = var.key_name
   subnet_id              = var.mongo_subnet_id
