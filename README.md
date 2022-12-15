@@ -60,6 +60,7 @@ No modules.
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | n/a | `string` | `".test.internal"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"dev"` | no |
 | <a name="input_instance_user"></a> [instance\_user](#input\_instance\_user) | n/a | `string` | `"ubuntu"` | no |
+| <a name="input_jumpbox_ami"></a> [jumpbox\_ami](#input\_jumpbox\_ami) | n/a | `string` | `"ami=0149b2da6ceec4bb0"` | no |
 | <a name="input_jumpbox_instance_type"></a> [jumpbox\_instance\_type](#input\_jumpbox\_instance\_type) | variable "profile" { default = "default" } | `string` | `"t2.nano"` | no |
 | <a name="input_jumpbox_subnet_id"></a> [jumpbox\_subnet\_id](#input\_jumpbox\_subnet\_id) | n/a | `any` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `any` | n/a | yes |

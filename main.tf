@@ -284,16 +284,16 @@ data "aws_iam_policy_document" "instance-assume-role-policy" {
   }
 }
 resource "aws_iam_role" "mongo-role" {
-  name               = "mongo_role"
+  name               = "${var.environment}-${var.region}-mongo_role"
   path               = "/system/"
   assume_role_policy = data.aws_iam_policy_document.instance-assume-role-policy.json
 }
 resource "aws_iam_instance_profile" "mongo-instance-profile" {
-  name = "mongo-instance-profile"
+  name = "${var.environment}-${var.region}-mongo-instance-profile"
   role = aws_iam_role.mongo-role.name
 }
 resource "aws_iam_role_policy" "ec2-describe-instance-policy" {
-  name   = "ec2-describe-instance-policy"
+  name   = "${var.environment}-${var.region}-ec2-describe-instance-policy"
   role   = aws_iam_role.mongo-role.id
   policy = <<EOF
 {
