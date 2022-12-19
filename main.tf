@@ -1,6 +1,5 @@
 provider "aws" {
   region  = var.region
-  #profile = var.profile
 }
 
 #############################
@@ -75,6 +74,9 @@ resource "aws_instance" "jumpbox" {
   tags = {
     Name = "Jumpbox"
   }
+  depends_on = [
+    aws_key_pair.ssh_key
+  ]
   #provisioner "file" {
   #  source      = "${file("/tmp/mongodb.pem")}"
   #  destination = "/home/ubuntu/mongodb.pem"
@@ -183,6 +185,9 @@ resource "aws_instance" "mongo_secondary" {
       bastion_user = "ubuntu"
     }
   }
+  depends_on = [
+    aws_key_pair.ssh_key
+  ]
 }
 
 #############################
@@ -242,6 +247,9 @@ resource "aws_instance" "mongo_primary" {
       bastion_user = "ubuntu"
     }
   }
+  depends_on = [
+    aws_key_pair.ssh_key
+  ]
 }
 resource "aws_security_group" "mongo_sg" {
   name   = "MongoDB_SG"
