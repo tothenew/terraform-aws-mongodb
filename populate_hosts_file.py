@@ -69,6 +69,7 @@ while allPassed != True:
         allPassed = True
 
 nodes_list = primary_node_list + secondary_node_list
+formatted_node_list = ','.join(nodes_list)
 
 with open('/cluster_setup.js', 'a') as f:
     f.writelines("sleep(1000);\n")
@@ -84,7 +85,7 @@ if mongo_node_type == "primary":
     response = client.put_parameter(
     	Name='/'+environment+'/'+ssm_parameter_prefix+'/MONGODB_HOST',
     	Description='MongoDB Endpoints',
-    	Value=str(nodes_list),
+    	Value=formatted_node_list,
     	Type='StringList',
      	Overwrite=True,
     )
