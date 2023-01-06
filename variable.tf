@@ -10,7 +10,7 @@ variable "key_name" {}
 #variable "profile" { default = "default" }
 variable "jumpbox_instance_type" { default = "t2.nano" }
 variable "instance_user" { default = "ubuntu" }
-variable "environment" { default = "dev" }
+variable "environment" { default = "env" }
 variable "replica_set_name" { default = "mongoRs" }
 variable "mongo_username" { default = "admin" }
 variable "num_secondary_nodes" { default = 2 }
@@ -20,3 +20,6 @@ variable "custom_domain" {
   type    = bool
   default = false
 }
+variable "project_name" {default ="dummy_prj"}
+
+
