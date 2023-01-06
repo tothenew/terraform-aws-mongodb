@@ -124,6 +124,7 @@ data "template_file" "userdata" {
     aws_region           = var.region
     environment          = var.environment
     ssm_parameter_prefix = var.ssm_parameter_prefix
+    project_name         = var.project_name
   }
 }
 

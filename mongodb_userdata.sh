@@ -50,10 +50,10 @@ EOL
 chown ubuntu:ubuntu /etc/systemd/system/mongod.service
 
 # Waiting for primary MongoDB server to come in running state 
-aws ec2 wait instance-running  --filters "Name=tag:Type,Values=primary" --region ${aws_region}
+aws ec2 wait instance-running  --filters "Name=tag:Type,Values=primary" "Name=tag:Environment,Values=${environment}" "Name=tag:Project,Values=${project_name}" --region ${aws_region}
 
 # System Settings for MongoDB Replica_Set
-PRIMARY_PRIVATE_IP=$(aws ec2 describe-instances --filters "Name=tag:Type,Values=primary" "Name=instance-state-name,Values=running" --region ${aws_region} | jq .Reservations[0].Instances[0].PrivateIpAddress --raw-output)
+PRIMARY_PRIVATE_IP=$(aws ec2 describe-instances --filters "Name=tag:Type,Values=primary" "Name=instance-state-name,Values=running" "Name=tag:Environment,Values=${environment}" "Name=tag:Project,Values=${project_name}" --region ${aws_region} | jq .Reservations[0].Instances[0].PrivateIpAddress --raw-output)
 if [ ${custom_domain} = true ]
 then
   echo "$PRIMARY_PRIVATE_IP mongo1${domain_name}" >> /etc/hosts
@@ -86,7 +86,7 @@ INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id --silent)
 MONGO_NODE_TYPE=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$INSTANCE_ID" "Name=key,Values=Type" --region ${aws_region} | jq .Tags[0].Value --raw-output)
 
 # Executing python script to setup host and cluster-setup file
-aws ec2 describe-instances --filters "Name=tag:Type,Values=secondary" "Name=instance-state-name,Values=running" --region ${aws_region} | jq . | ./populate_hosts_file.py ${replica_set_name} ${mongo_database} ${mongo_username} ${mongo_password} ${domain_name} ${custom_domain} $PRIMARY_PRIVATE_IP $MONGO_NODE_TYPE ${aws_region} ${environment} ${ssm_parameter_prefix}
+aws ec2 describe-instances --filters "Name=tag:Type,Values=secondary" "Name=instance-state-name,Values=running" "Name=tag:Environment,Values=${environment}" "Name=tag:Project,Values=${project_name}" --region ${aws_region} | jq . | ./populate_hosts_file.py ${replica_set_name} ${mongo_database} ${mongo_username} ${mongo_password} ${domain_name} ${custom_domain} $PRIMARY_PRIVATE_IP $MONGO_NODE_TYPE ${aws_region} ${environment} ${ssm_parameter_prefix}
 
 if [ ${custom_domain} = true ]
 then
