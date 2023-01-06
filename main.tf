@@ -143,6 +143,8 @@ resource "aws_instance" "mongo_secondary" {
     volume_type = "standard"
   }
   tags = {
+    Project = "${var.project_name}"
+    Environment = "${var.environment}"
     Name = "Mongo_Secondary_${count.index + 1}"
     Type = "secondary"
   }
@@ -205,9 +207,13 @@ resource "aws_instance" "mongo_primary" {
     volume_type = "standard"
   }
   tags = {
+    Project = "${var.project_name}"
+    Environment = "${var.environment}"
     Name = "Mongo_Primary"
     Type = "primary"
   }
+
+
   provisioner "file" {
     source      = "${path.module}/populate_hosts_file.py"
     destination = "/home/ubuntu/populate_hosts_file.py"
