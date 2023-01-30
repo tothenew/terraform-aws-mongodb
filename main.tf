@@ -190,18 +190,6 @@ resource "aws_instance" "mongo_primary" {
     }
   }
   provisioner "file" {
-    source      = "${path.module}/mongodb_userdata.sh"
-    destination = "/home/ubuntu/mongodb_userdata.sh"
-    connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = "${self.private_ip}"
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
-
-    }
-  }
-  provisioner "file" {
     source      = "${path.module}/keyFile"
     destination = "/home/ubuntu/keyFile"
     connection {
