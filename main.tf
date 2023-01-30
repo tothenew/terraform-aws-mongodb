@@ -17,7 +17,7 @@ data "aws_vpc" "mongodb_vpc" {
 }
 
 #############################
-# Key Pair                  
+# Key Pair
 #############################
 resource "tls_private_key" "ssh_private_key" {
   algorithm = "RSA"
@@ -27,8 +27,7 @@ resource "aws_key_pair" "ssh_key" {
   key_name   = var.key_name
   public_key = tls_private_key.ssh_private_key.public_key_openssh
   provisioner "local-exec" { # This will create "mongodb.pem" where the terraform will run!!
-    command = "rm -f ./mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > ./mongodb.pem && chmod 400 mongodb.pem "
-          
+    command = "rm -f ./mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > ./mongodb.pem && chmod 400 mongodb.pem"
   }
 }
 
@@ -58,7 +57,6 @@ resource "aws_ssm_parameter" "mongodb_admin_db" {
   type  = "String"
   value = var.mongo_database
 }
-
 
 #############################
 # Mongo Userdata
@@ -107,11 +105,9 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
-
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      
     }
   }
   provisioner "file" {
@@ -120,10 +116,9 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-
     }
   }
   provisioner "file" {
@@ -132,7 +127,7 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem_pkcs8
     }
@@ -163,18 +158,15 @@ resource "aws_instance" "mongo_primary" {
     Name = "Mongo_Primary"
     Type = "primary"
   }
-
-
   provisioner "file" {
     source      = "${path.module}/populate_hosts_file.py"
     destination = "/home/ubuntu/populate_hosts_file.py"
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      
     }
   }
   provisioner "file" {
@@ -183,10 +175,9 @@ resource "aws_instance" "mongo_primary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      
     }
   }
   provisioner "file" {
@@ -195,10 +186,9 @@ resource "aws_instance" "mongo_primary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = "${self.private_ip}"
+      host         = self.private_ip
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      
     }
   }
   depends_on = [
