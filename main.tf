@@ -129,7 +129,7 @@ resource "aws_instance" "mongo_secondary" {
       user         = "ubuntu"
       host         = self.private_ip
       agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem_pkcs8
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   depends_on = [
