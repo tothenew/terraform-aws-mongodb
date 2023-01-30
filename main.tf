@@ -17,7 +17,7 @@ data "aws_vpc" "mongodb_vpc" {
 }
 
 #############################
-# Key Pair
+# Key Pair                  
 #############################
 resource "tls_private_key" "ssh_private_key" {
   algorithm = "RSA"
@@ -27,7 +27,8 @@ resource "aws_key_pair" "ssh_key" {
   key_name   = var.key_name
   public_key = tls_private_key.ssh_private_key.public_key_openssh
   provisioner "local-exec" { # This will create "mongodb.pem" where the terraform will run!!
-    command = "rm -f ./mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > ./mongodb.pem"
+    command = "rm -f ./mongodb.pem && echo '${tls_private_key.ssh_private_key.private_key_pem}' > ./mongodb.pem && chmod 400 mongodb.pem "
+          
   }
 }
 
@@ -57,57 +58,7 @@ resource "aws_ssm_parameter" "mongodb_admin_db" {
   type  = "String"
   value = var.mongo_database
 }
-#############################
-# Jumpbox Instance
-#############################
-resource "aws_instance" "jumpbox" {
-  ami                         = var.mongo_ami
-  instance_type               = var.jumpbox_instance_type
-  key_name                    = var.key_name
-  subnet_id                   = var.jumpbox_subnet_id
-  associate_public_ip_address = true
-  user_data                   = filebase64("${path.module}/jumpbox_userdata.sh")
-  vpc_security_group_ids      = ["${aws_security_group.jumpbox_sg.id}"]
-  root_block_device {
-    volume_type = "standard"
-  }
-  tags = {
-    Name = "Jumpbox"
-  }
-  depends_on = [
-    aws_key_pair.ssh_key
-  ]
-  #provisioner "file" {
-  #  source      = "${file("/tmp/mongodb.pem")}"
-  #  destination = "/home/ubuntu/mongodb.pem"
-  #  connection {
-  #    type         = "ssh"
-  #    user         = "ubuntu"
-  #    host         = "${self.public_ip}"
-  #    agent        = false
-  #    private_key  = tls_private_key.ssh_private_key.private_key_pem
-  #  }
-  #}
-}
-resource "aws_security_group" "jumpbox_sg" {
-  name   = "Jumpbox_SG"
-  vpc_id = var.vpc_id
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${chomp(data.http.terraform_server_ip.response_body)}/32"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "Jumpbox_SG"
-  }
-}
+
 
 #############################
 # Mongo Userdata
@@ -140,6 +91,7 @@ resource "aws_instance" "mongo_secondary" {
   user_data              = data.template_file.userdata.rendered
   vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
   iam_instance_profile   = aws_iam_instance_profile.mongo-instance-profile.name
+  associate_public_ip_address = false
   root_block_device {
     volume_type = "standard"
   }
@@ -155,11 +107,11 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
+
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+      
     }
   }
   provisioner "file" {
@@ -168,11 +120,10 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+
     }
   }
   provisioner "file" {
@@ -181,11 +132,9 @@ resource "aws_instance" "mongo_secondary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
       agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+      private_key  = tls_private_key.ssh_private_key.private_key_pem_pkcs8
     }
   }
   depends_on = [
@@ -204,6 +153,7 @@ resource "aws_instance" "mongo_primary" {
   user_data              = data.template_file.userdata.rendered
   vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
   iam_instance_profile   = aws_iam_instance_profile.mongo-instance-profile.name
+  associate_public_ip_address = false
   root_block_device {
     volume_type = "standard"
   }
@@ -221,11 +171,10 @@ resource "aws_instance" "mongo_primary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+      
     }
   }
   provisioner "file" {
@@ -234,11 +183,22 @@ resource "aws_instance" "mongo_primary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+      
+    }
+  }
+  provisioner "file" {
+    source      = "${path.module}/mongodb_userdata.sh"
+    destination = "/home/ubuntu/mongodb_userdata.sh"
+    connection {
+      type         = "ssh"
+      user         = "ubuntu"
+      host         = "${self.private_ip}"
+      agent        = false
+      private_key  = tls_private_key.ssh_private_key.private_key_pem
+
     }
   }
   provisioner "file" {
@@ -247,11 +207,10 @@ resource "aws_instance" "mongo_primary" {
     connection {
       type         = "ssh"
       user         = "ubuntu"
-      host         = self.private_ip
+      host         = "${self.private_ip}"
       agent        = false
       private_key  = tls_private_key.ssh_private_key.private_key_pem
-      bastion_host = aws_instance.jumpbox.public_ip
-      bastion_user = "ubuntu"
+      
     }
   }
   depends_on = [
