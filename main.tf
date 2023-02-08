@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 #############################
@@ -144,10 +144,10 @@ resource "aws_instance" "mongo_secondary" {
     volume_type = "standard"
   }
   tags = {
-    Project = "${var.project_name}"
+    Project     = "${var.project_name}"
     Environment = "${var.environment}"
-    Name = "Mongo_Secondary_${count.index + 1}"
-    Type = "secondary"
+    Name        = "Mongo_Secondary_${count.index + 1}"
+    Type        = "secondary"
   }
   provisioner "file" {
     source      = "${path.module}/populate_hosts_file.py"
@@ -208,10 +208,10 @@ resource "aws_instance" "mongo_primary" {
     volume_type = "standard"
   }
   tags = {
-    Project = "${var.project_name}"
+    Project     = "${var.project_name}"
     Environment = "${var.environment}"
-    Name = "Mongo_Primary"
-    Type = "primary"
+    Name        = "Mongo_Primary"
+    Type        = "primary"
   }
 
 
@@ -332,4 +332,13 @@ resource "aws_iam_role_policy" "ec2-describe-instance-policy" {
       ]
 }
 EOF
+}
+
+data "aws_iam_policy" "mongo_ssm_mananged_instance_core" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "mongo_ssm_mananged_instance_core" {
+  policy_arn = data.aws_iam_policy.mongo_ssm_mananged_instance_core.arn
+  role       = aws_iam_role.mongo-role.id
 }
