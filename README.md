@@ -19,11 +19,11 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.51.0 |
-| <a name="provider_http"></a> [http](#provider\_http) | 3.2.1 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
-| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_http"></a> [http](#provider\_http) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_template"></a> [template](#provider\_template) | n/a |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
 
 ## Modules
 
