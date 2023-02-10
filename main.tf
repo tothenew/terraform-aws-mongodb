@@ -270,3 +270,12 @@ resource "aws_iam_role_policy" "ec2-describe-instance-policy" {
 }
 EOF
 }
+
+data "aws_iam_policy" "mongo_ssm_mananged_instance_core" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "mongo_ssm_mananged_instance_core" {
+  policy_arn = data.aws_iam_policy.mongo_ssm_mananged_instance_core.arn
+  role       = aws_iam_role.mongo-role.id
+}
