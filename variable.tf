@@ -17,6 +17,6 @@ variable "custom_domain" {
   type    = bool
   default = false
 }
-variable "project_name" {default ="dummy_prj"}
+variable "project_name" { default = "dummy_prj" }
 
 
