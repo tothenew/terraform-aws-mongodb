@@ -27,21 +27,8 @@ variable "mongo_subnet_id" {
   type = string
 }
 
-variable "jumpbox_subnet_id" {
-  type = string
-}
-
 variable "key_name" {
   type = string
-}
-/*
-variable "profile" {
-default = "default"
-}
-*/
-variable "jumpbox_instance_type" {
-  type    = string
-  default = "t2.nano"
 }
 
 variable "instance_user" {

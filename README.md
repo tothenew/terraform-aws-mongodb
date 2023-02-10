@@ -36,11 +36,9 @@ No modules.
 | [aws_iam_instance_profile.mongo-instance-profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_role.mongo-role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.ec2-describe-instance-policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_instance.jumpbox](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_instance.mongo_primary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_instance.mongo_secondary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_key_pair.ssh_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
-| [aws_security_group.jumpbox_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group.mongo_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_ssm_parameter.mongodb_admin_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [aws_ssm_parameter.mongodb_admin_password](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
@@ -58,17 +56,16 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_custom_domain"></a> [custom\_domain](#input\_custom\_domain) | n/a | `bool` | `false` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | n/a | `string` | `".test.internal"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"env"` | no |
 | <a name="input_instance_user"></a> [instance\_user](#input\_instance\_user) | n/a | `string` | `"ubuntu"` | no |
-| <a name="input_jumpbox_instance_type"></a> [jumpbox\_instance\_type](#input\_jumpbox\_instance\_type) | variable "profile" { default = "default" } | `string` | `"t2.nano"` | no |
-| <a name="input_jumpbox_subnet_id"></a> [jumpbox\_subnet\_id](#input\_jumpbox\_subnet\_id) | n/a | `any` | n/a | yes |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `any` | n/a | yes |
-| <a name="input_mongo_ami"></a> [mongo\_ami](#input\_mongo\_ami) | n/a | `string` | `"ami=0149b2da6ceec4bb0"` | no |
+| <a name="input_mongo_ami"></a> [mongo\_ami](#input\_mongo\_ami) | n/a | `string` | `"ami-0149b2da6ceec4bb0"` | no |
 | <a name="input_mongo_database"></a> [mongo\_database](#input\_mongo\_database) | n/a | `any` | n/a | yes |
 | <a name="input_mongo_subnet_id"></a> [mongo\_subnet\_id](#input\_mongo\_subnet\_id) | n/a | `any` | n/a | yes |
 | <a name="input_mongo_username"></a> [mongo\_username](#input\_mongo\_username) | n/a | `string` | `"admin"` | no |
 | <a name="input_num_secondary_nodes"></a> [num\_secondary\_nodes](#input\_num\_secondary\_nodes) | n/a | `number` | `2` | no |
 | <a name="input_primary_node_type"></a> [primary\_node\_type](#input\_primary\_node\_type) | n/a | `any` | n/a | yes |
+| <a name="input_project_name"></a> [project\_name](#input\_project\_name) | n/a | `string` | `"dummy_prj"` | no |
 | <a name="input_region"></a> [region](#input\_region) | n/a | `any` | n/a | yes |
 | <a name="input_replica_set_name"></a> [replica\_set\_name](#input\_replica\_set\_name) | n/a | `string` | `"mongoRs"` | no |
 | <a name="input_secondary_node_type"></a> [secondary\_node\_type](#input\_secondary\_node\_type) | n/a | `any` | n/a | yes |
