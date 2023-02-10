@@ -1,14 +1,11 @@
 variable "region" {}
-variable "mongo_ami" { default = "ami=0149b2da6ceec4bb0"  }
+variable "mongo_ami" { default = "ami-0149b2da6ceec4bb0" }
 variable "secondary_node_type" {}
 variable "primary_node_type" {}
 variable "vpc_id" {}
 variable "mongo_database" {}
 variable "mongo_subnet_id" {}
-variable "jumpbox_subnet_id" {}
 variable "key_name" {}
-#variable "profile" { default = "default" }
-variable "jumpbox_instance_type" { default = "t2.nano" }
 variable "instance_user" { default = "ubuntu" }
 variable "environment" { default = "env" }
 variable "replica_set_name" { default = "mongoRs" }
@@ -20,6 +17,6 @@ variable "custom_domain" {
   type    = bool
   default = false
 }
-variable "project_name" {default ="dummy_prj"}
+variable "project_name" { default = "dummy_prj" }
 
 
