@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = var.region
+  region = var.region
 }
 
 #############################
@@ -81,55 +81,55 @@ data "template_file" "userdata" {
 # Mongo Slave Instances
 #############################
 resource "aws_instance" "mongo_secondary" {
-  count                  = var.num_secondary_nodes
-  ami                    = var.mongo_ami
-  instance_type          = var.secondary_node_type
-  key_name               = var.key_name
-  subnet_id              = var.mongo_subnet_id
-  user_data              = data.template_file.userdata.rendered
-  vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
-  iam_instance_profile   = aws_iam_instance_profile.mongo-instance-profile.name
+  count                       = var.num_secondary_nodes
+  ami                         = var.mongo_ami
+  instance_type               = var.secondary_node_type
+  key_name                    = var.key_name
+  subnet_id                   = var.mongo_subnet_id
+  user_data                   = data.template_file.userdata.rendered
+  vpc_security_group_ids      = ["${aws_security_group.mongo_sg.id}"]
+  iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
     volume_type = "standard"
   }
   tags = {
-    Project = "${var.project_name}"
+    Project     = "${var.project_name}"
     Environment = "${var.environment}"
-    Name = "Mongo_Secondary_${count.index + 1}"
-    Type = "secondary"
+    Name        = "Mongo_Secondary_${count.index + 1}"
+    Type        = "secondary"
   }
   provisioner "file" {
     source      = "${path.module}/populate_hosts_file.py"
     destination = "/home/ubuntu/populate_hosts_file.py"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   provisioner "file" {
     source      = "${path.module}/parse_instance_tags.py"
     destination = "/home/ubuntu/parse_instance_tags.py"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   provisioner "file" {
     source      = "${path.module}/keyFile"
     destination = "/home/ubuntu/keyFile"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   depends_on = [
@@ -141,54 +141,54 @@ resource "aws_instance" "mongo_secondary" {
 # Mongo Primary Instances
 #############################
 resource "aws_instance" "mongo_primary" {
-  ami                    = var.mongo_ami
-  instance_type          = var.primary_node_type
-  key_name               = var.key_name
-  subnet_id              = var.mongo_subnet_id
-  user_data              = data.template_file.userdata.rendered
-  vpc_security_group_ids = ["${aws_security_group.mongo_sg.id}"]
-  iam_instance_profile   = aws_iam_instance_profile.mongo-instance-profile.name
+  ami                         = var.mongo_ami
+  instance_type               = var.primary_node_type
+  key_name                    = var.key_name
+  subnet_id                   = var.mongo_subnet_id
+  user_data                   = data.template_file.userdata.rendered
+  vpc_security_group_ids      = ["${aws_security_group.mongo_sg.id}"]
+  iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
     volume_type = "standard"
   }
   tags = {
-    Project = "${var.project_name}"
+    Project     = "${var.project_name}"
     Environment = "${var.environment}"
-    Name = "Mongo_Primary"
-    Type = "primary"
+    Name        = "Mongo_Primary"
+    Type        = "primary"
   }
   provisioner "file" {
     source      = "${path.module}/populate_hosts_file.py"
     destination = "/home/ubuntu/populate_hosts_file.py"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   provisioner "file" {
     source      = "${path.module}/parse_instance_tags.py"
     destination = "/home/ubuntu/parse_instance_tags.py"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   provisioner "file" {
     source      = "${path.module}/keyFile"
     destination = "/home/ubuntu/keyFile"
     connection {
-      type         = "ssh"
-      user         = "ubuntu"
-      host         = self.private_ip
-      agent        = false
-      private_key  = tls_private_key.ssh_private_key.private_key_pem
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.private_ip
+      agent       = false
+      private_key = tls_private_key.ssh_private_key.private_key_pem
     }
   }
   depends_on = [
