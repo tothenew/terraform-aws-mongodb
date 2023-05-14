@@ -26,7 +26,7 @@ wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add 
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
 apt-get update
 apt-get install -y mongodb-org unzip python3-distutils jq build-essential python3-dev
-chown -R mongod:mongo /var/lib/mongodb
+chown -R mongodb:mongodb /var/lib/mongodb
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
 rm -f get-pip.py
