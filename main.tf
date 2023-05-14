@@ -59,6 +59,58 @@ resource "aws_ssm_parameter" "mongodb_admin_db" {
 }
 
 #############################
+# Creating Data volumes 
+#############################
+
+resource "aws_ebs_volume" "master_data_volume" {
+  depends_on = [ aws_instance.mongo_primary ]
+  
+  availability_zone = aws_instance.mongo_primary.availability_zone
+  size              = var.volume_size
+  type              = var.volume_type
+
+  tags = {
+    Project     = "${var.project_name}"
+    Environment = "${var.environment}"
+    Name        = "Mongo_Primary-disk"
+    Type        = "primary"
+  }
+}
+
+resource "aws_ebs_volume" "secondary_data_volume" {
+  depends_on        = [ aws_instance.mongo_secondary ]
+  count             = var.num_secondary_nodes
+
+  availability_zone = aws_instance.mongo_secondary.availability_zone
+  size              = var.volume_size
+  type              = var.volume_type
+  tags = {
+    Project     = "${var.project_name}"
+    Environment = "${var.environment}"
+    Name        = "Mongo_Secondary_${count.index + 1}-disk"
+    Type        = "secondary"
+  }
+}
+
+#############################
+# Attach volume to instance
+#############################
+
+resource "aws_volume_attachment" "master" {
+  device_name = "/dev/sdf"
+  volume_id   = aws_ebs_volume.master_data_volume.id
+  instance_id = aws_instance.mongo_primary.id
+}
+
+resource "aws_volume_attachment" "master" {
+  count       = var.num_secondary_nodes
+  device_name = "/dev/sdf"
+  volume_id   = aws_ebs_volume.secondary_data_volume[count.index].id
+  instance_id = aws_instance.mongo_secondary[count.index].id
+}
+
+
+#############################
 # Mongo Userdata
 #############################
 data "template_file" "userdata" {
@@ -150,7 +202,7 @@ resource "aws_instance" "mongo_primary" {
   iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
-    volume_type = "standard"
+    volume_type = var.volume_type
   }
   tags = {
     Project     = "${var.project_name}"

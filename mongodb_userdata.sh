@@ -3,6 +3,9 @@ set -x
 
 exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
 
+# Mounting data volume
+
+
 # Installing AWS_CLI
 apt-get update
 apt install awscli -y 
