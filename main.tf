@@ -3,13 +3,6 @@ provider "aws" {
 }
 
 #############################
-# Fetch terraform server IP
-#############################
-data "http" "terraform_server_ip" {
-  url = "http://ipv4.icanhazip.com"
-}
-
-#############################
 # Fetch VPC CIDR
 #############################
 data "aws_vpc" "mongodb_vpc" {
