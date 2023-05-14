@@ -9,7 +9,7 @@ mkdir -p /var/lib/mongodb
 mkfs -t xfs /dev/nvme1n1
 mount /dev/nvme1n1 /var/lib/mongodb
 blkid=$(blkid | grep nvme1n1 | cut -d '"' -f 2)
-echo "UUID=${blkid}  /var/lib/mongodb  xfs  defaults,nofail  0  2" >> /etc/fstab
+echo "UUID=$blkid  /var/lib/mongodb  xfs  defaults,nofail  0  2" >> /etc/fstab
 # Installing AWS_CLI
 apt-get update
 apt install awscli -y 
