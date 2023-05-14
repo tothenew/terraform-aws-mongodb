@@ -102,7 +102,7 @@ resource "aws_volume_attachment" "master" {
   instance_id = aws_instance.mongo_primary.id
 }
 
-resource "aws_volume_attachment" "master" {
+resource "aws_volume_attachment" "secondary" {
   count       = var.num_secondary_nodes
   device_name = "/dev/sdf"
   volume_id   = aws_ebs_volume.secondary_data_volume[count.index].id
