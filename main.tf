@@ -81,7 +81,7 @@ resource "aws_ebs_volume" "secondary_data_volume" {
   depends_on        = [ aws_instance.mongo_secondary ]
   count             = var.num_secondary_nodes
 
-  availability_zone = aws_instance.mongo_secondary.availability_zone
+  availability_zone = aws_instance.mongo_secondary[count.index].availability_zone
   size              = var.volume_size
   type              = var.volume_type
   tags = {
