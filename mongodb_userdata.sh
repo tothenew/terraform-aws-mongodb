@@ -107,7 +107,7 @@ systemctl start mongod.service
 
 if [ $MONGO_NODE_TYPE == "primary" ]; 
 then
-  sleep 60
+  sleep 300
   mongo ./cluster_setup.js
   sleep 60
   mongo ./user_setup.js
