@@ -111,6 +111,9 @@ then
   mongo ./cluster_setup.js
   sleep 60
   mongo ./user_setup.js
+  sleep 60 
+  sed -i 's/999/0/g' /cluster_setup.js
+  mongo -u${mongo_username} -p${mongo_password} --authenticationDatabase admin admin ./cluster_setup.js
 fi
 
 systemctl start mongod.service

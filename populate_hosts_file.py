@@ -23,7 +23,7 @@ ssm_parameter_prefix = sys.argv[11]
 total_nodes = []
 
 if custom_domain == "true":
-    config = {"_id": replica_set_name, "members": [{ "_id": 0, "host": "mongo1"+domain_name+":27017", "priority": 0 }]}
+    config = {"_id": replica_set_name, "members": [{ "_id": 0, "host": "mongo1"+domain_name+":27017", "priority": 999 }]}
     primary_node_list = ["mongo1"+domain_name]
     secondary_node_list = []
     secondary_nodes = []
@@ -42,7 +42,7 @@ if custom_domain == "true":
                     f.writelines('{0} '.format(private_ip)+secondary_node_with_dns+'\n')
     allPassed = False
 else:
-    config = {"_id": replica_set_name, "members": [{ "_id": 0, "host": primary_private_ip+":27017", "priority": 0 }]}
+    config = {"_id": replica_set_name, "members": [{ "_id": 0, "host": primary_private_ip+":27017", "priority": 999 }]}
     primary_node_list = [primary_private_ip]
     secondary_node_list = []
     secondary_nodes = []
