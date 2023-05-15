@@ -75,7 +75,7 @@ formatted_node_list = ','.join(nodes_list)
 with open('/priority_change.js', 'a') as f:
     f.writelines("cfg = rs.conf()\n")
     for node in range(0,len(config["members"])):
-        f.writelines(f"cfg.members[{node}].priority = 1")
+        f.writelines(f"cfg.members[{node}].priority = 1\n")
     f.writelines("rs.reconfig(cfg)")
 
 with open('/cluster_setup.js', 'a') as f:
