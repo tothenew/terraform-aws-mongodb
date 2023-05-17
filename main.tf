@@ -91,7 +91,8 @@ resource "aws_instance" "mongo_secondary" {
   iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
-    volume_type = "standard"
+    volume_type = var.mongo_volume_type
+    volume_size = var.mongo_volume_size
   }
   tags = {
     Project     = "${var.project_name}"
@@ -150,7 +151,8 @@ resource "aws_instance" "mongo_primary" {
   iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
-    volume_type = "standard"
+    volume_type = var.mongo_volume_type
+    volume_size = var.mongo_volume_size
   }
   tags = {
     Project     = "${var.project_name}"

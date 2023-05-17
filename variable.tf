@@ -75,3 +75,12 @@ variable "project_name" {
   default = "dummy_prj"
 }
 
+variable "mongo_volume_size" {
+  type    = string
+  default = 50
+}
+
+variable "mongo_volume_type" {
+  type    = string
+  default = "gp3"
+}
