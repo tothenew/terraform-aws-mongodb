@@ -117,7 +117,7 @@ sudo mv node_exporter-1.5.0.linux-amd64/node_exporter /usr/local/bin/
 sudo useradd -rs /bin/false node_exporter
 
 # Create a systemd service file for Node Exporter
-sudo tee /etc/systemd/system/node_exporter.service << EOF
+tee /etc/systemd/system/node_exporter.service << EOF
 [Unit]
 Description=Node Exporter
 Wants=network-online.target
