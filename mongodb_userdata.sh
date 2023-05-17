@@ -145,4 +145,4 @@ sudo systemctl enable node_exporter
 sudo systemctl status node_exporter
 
 sudo apt-get update
-sudo apt-get install prometheus-mongodb-exporter
+sudo apt-get install -y prometheus-mongodb-exporter 
