@@ -107,15 +107,18 @@ fi
 
 systemctl start mongod.service
 
-sudo yum update -y
+NODE_EXPORTER_VERSION="1.2.2"  # Replace with the desired version
+wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
+tar xvfz node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
 
-wget https://github.com/prometheus/node_exporter/releases/download/v1.2.0/node_exporter-1.2.0.linux-amd64.tar.gz
-tar xvfz node_exporter-1.2.0.linux-amd64.tar.gz
+# Move Node Exporter binaries
+sudo mv node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64/node_exporter /usr/local/bin/
 
-sudo mv node_exporter-1.2.0.linux-amd64/node_exporter /usr/local/bin/
+# Create a system user for Node Exporter
+sudo useradd -rs /bin/false node_exporter
 
-
-sudo tee /etc/systemd/system/node_exporter.service <<EOF
+# Create a systemd service file for Node Exporter
+sudo tee /etc/systemd/system/node_exporter.service << EOF
 [Unit]
 Description=Node Exporter
 Wants=network-online.target
@@ -124,44 +127,20 @@ After=network-online.target
 [Service]
 User=node_exporter
 Group=node_exporter
-Type=simple
 ExecStart=/usr/local/bin/node_exporter
 
 [Install]
 WantedBy=default.target
-
 EOF
 
-sudo useradd -rs /bin/false node_exporter
-
+# Set ownership and permissions
 sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
-sudo chmod 755 /usr/local/bin/node_exporter
+sudo chmod +x /usr/local/bin/node_exporter
 
+# Reload systemd and start Node Exporter
 sudo systemctl daemon-reload
-sudo systemctl enable node
+sudo systemctl start node_exporter
+
+# Enable Node Exporter to start on system boot
+sudo systemctl enable node_exporter
 sudo systemctl status node_exporter
-
-
-mkdir mongodb-exporter                    
-cd mongodb-exporter                    
-                    
-wget https://github.com/percona/mongodb_exporter/releases/download/v0.7.1/mongodb_exporter-0.7.1.linux-amd64.tar.gz                    
-tar xvzf mongodb_exporter-0.7.1.linux-amd64.tar.gz                    
-sudo useradd -rs /bin/false prometheus                    
-sudo mv mongodb_exporter /usr/local/bin/                    
-cd /lib/systemd/system/                
-sudo vim mongodb_exporter.service                
-[Unit]                
-Description=MongoDB Exporter                
-User=prometheus                
-                
-[Service]                
-Type=simple                
-Restart=always                
-ExecStart=/usr/local/bin/mongodb_exporter --mongodb.uri=mongodb://mongodb_exporter:password@<mongo-ip>:27017                
-                
-[Install]                
-WantedBy=multi-user.target                
-                
-sudo systemctl daemon-reload                
-sudo systemctl start mongodb_exporter.service
