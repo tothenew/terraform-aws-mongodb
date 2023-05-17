@@ -143,3 +143,6 @@ sudo systemctl start node_exporter
 # Enable Node Exporter to start on system boot
 sudo systemctl enable node_exporter
 sudo systemctl status node_exporter
+
+sudo apt-get update
+sudo apt-get install prometheus-mongodb-exporter
