@@ -136,7 +136,7 @@ resource "aws_instance" "mongo_secondary" {
   iam_instance_profile        = aws_iam_instance_profile.mongo-instance-profile.name
   associate_public_ip_address = false
   root_block_device {
-    volume_type = "standard"
+    volume_type = var.volume_type
   }
   tags = {
     Project     = "${var.project_name}"
