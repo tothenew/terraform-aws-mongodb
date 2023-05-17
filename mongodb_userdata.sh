@@ -107,6 +107,41 @@ fi
 
 systemctl start mongod.service
 
+sudo yum update -y
+
+wget https://github.com/prometheus/node_exporter/releases/download/v1.2.0/node_exporter-1.2.0.linux-amd64.tar.gz
+tar xvfz node_exporter-1.2.0.linux-amd64.tar.gz
+
+sudo mv node_exporter-1.2.0.linux-amd64/node_exporter /usr/local/bin/
+
+
+sudo tee /etc/systemd/system/node_exporter.service <<EOF
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=default.target
+                                                                                                                           1,11          Top
+EOF
+
+sudo useradd -rs /bin/false node_exporter
+
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+sudo chmod 755 /usr/local/bin/node_exporter
+
+sudo systemctl daemon-reload
+sudo systemctl enable node
+sudo systemctl status node_exporter
+
+
 mkdir mongodb-exporter                    
 cd mongodb-exporter                    
                     
