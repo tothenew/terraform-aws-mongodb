@@ -106,3 +106,27 @@ then
 fi
 
 systemctl start mongod.service
+
+mkdir mongodb-exporter                    
+cd mongodb-exporter                    
+                    
+wget https://github.com/percona/mongodb_exporter/releases/download/v0.7.1/mongodb_exporter-0.7.1.linux-amd64.tar.gz                    
+tar xvzf mongodb_exporter-0.7.1.linux-amd64.tar.gz                    
+sudo useradd -rs /bin/false prometheus                    
+sudo mv mongodb_exporter /usr/local/bin/                    
+cd /lib/systemd/system/                
+sudo vim mongodb_exporter.service                
+[Unit]                
+Description=MongoDB Exporter                
+User=prometheus                
+                
+[Service]                
+Type=simple                
+Restart=always                
+ExecStart=/usr/local/bin/mongodb_exporter --mongodb.uri=mongodb://mongodb_exporter:password@<mongo-ip>:27017                
+                
+[Install]                
+WantedBy=multi-user.target                
+                
+sudo systemctl daemon-reload                
+sudo systemctl start mongodb_exporter.service
