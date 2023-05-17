@@ -129,7 +129,7 @@ ExecStart=/usr/local/bin/node_exporter
 
 [Install]
 WantedBy=default.target
-                                                                                                                           1,11          Top
+
 EOF
 
 sudo useradd -rs /bin/false node_exporter
