@@ -107,12 +107,11 @@ fi
 
 systemctl start mongod.service
 
-NODE_EXPORTER_VERSION="1.2.2"  # Replace with the desired version
-wget https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-tar xvfz node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
+wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+tar xvfz node_exporter-1.5.0.linux-amd64.tar.gz
 
 # Move Node Exporter binaries
-sudo mv node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64/node_exporter /usr/local/bin/
+sudo mv node_exporter-1.5.0.linux-amd64/node_exporter /usr/local/bin/
 
 # Create a system user for Node Exporter
 sudo useradd -rs /bin/false node_exporter
