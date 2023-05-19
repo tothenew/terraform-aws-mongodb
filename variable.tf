@@ -11,6 +11,18 @@ variable "secondary_node_type" {
   type = string
 }
 
+variable "volume_type" {
+  type        = string
+  description = "EBS volume type"
+  default     = "gp3"  
+}
+
+variable "volume_size" {
+  type        = number
+  description = "EBS volume type"
+  default     = 50  
+}
+
 variable "primary_node_type" {
   type = string
 }

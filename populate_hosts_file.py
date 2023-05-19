@@ -71,6 +71,13 @@ while allPassed != True:
 nodes_list = primary_node_list + secondary_node_list
 formatted_node_list = ','.join(nodes_list)
 
+# Creating priority change script
+with open('/priority_change.js', 'a') as f:
+    f.writelines("cfg = rs.conf()\n")
+    for node in range(0,len(config["members"])):
+        f.writelines(f"cfg.members[{node}].priority = 1\n")
+    f.writelines("rs.reconfig(cfg)")
+
 with open('/cluster_setup.js', 'a') as f:
     f.writelines("sleep(1000);\n")
     f.writelines("rs.initiate({0})".format(config))

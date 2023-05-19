@@ -3,6 +3,13 @@ set -x
 
 exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
 
+# Mounting data volume
+sleep 120
+mkdir -p /var/lib/mongodb
+mkfs -t xfs /dev/nvme1n1
+mount /dev/nvme1n1 /var/lib/mongodb
+blkid=$(blkid | grep nvme1n1 | cut -d '"' -f 2)
+echo "UUID=$blkid  /var/lib/mongodb  xfs  defaults,nofail  0  2" >> /etc/fstab
 # Installing AWS_CLI
 apt-get update
 apt install awscli -y 
@@ -19,6 +26,7 @@ wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add 
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
 apt-get update
 apt-get install -y mongodb-org unzip python3-distutils jq build-essential python3-dev
+chown -R mongodb:mongodb /var/lib/mongodb
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
 rm -f get-pip.py
@@ -99,10 +107,12 @@ systemctl start mongod.service
 
 if [ $MONGO_NODE_TYPE == "primary" ]; 
 then
-  sleep 60
+  sleep 300
   mongo ./cluster_setup.js
   sleep 60
   mongo ./user_setup.js
+  sleep 60 
+  mongo -u${mongo_username} -p${mongo_password} --authenticationDatabase admin ./priority_change.js
 fi
 
 systemctl start mongod.service
