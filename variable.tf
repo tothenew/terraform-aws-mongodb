@@ -20,7 +20,7 @@ variable "volume_type" {
 variable "volume_size" {
   type        = number
   description = "EBS volume type"
-  default     = 10  
+  default     = 50  
 }
 
 variable "primary_node_type" {
