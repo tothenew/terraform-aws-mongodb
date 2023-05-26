@@ -261,6 +261,18 @@ resource "aws_security_group" "mongo_sg" {
     protocol    = "icmp"
     cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
   }
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
+  }
+  ingress {
+    from_port   = 9001
+    to_port     = 9001
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_vpc.mongodb_vpc.cidr_block}"]
+  }
   egress {
     from_port   = 0
     to_port     = 0
