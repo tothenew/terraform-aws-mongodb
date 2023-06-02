@@ -2,6 +2,12 @@ variable "region" {
   type = string
 }
 
+variable "master_user_data_path" {
+  description = "Path for userdata file"
+  type = string
+  default = ""
+}
+
 variable "mongo_ami" {
   type    = string
   default = "ami=0149b2da6ceec4bb0"
