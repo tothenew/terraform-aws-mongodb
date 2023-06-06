@@ -71,6 +71,7 @@ No modules.
 | <a name="input_secondary_node_type"></a> [secondary\_node\_type](#input\_secondary\_node\_type) | n/a | `any` | n/a | yes |
 | <a name="input_ssm_parameter_prefix"></a> [ssm\_parameter\_prefix](#input\_ssm\_parameter\_prefix) | n/a | `string` | `"MongoDB"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | n/a | `any` | n/a | yes |
+| <a name="input_master_user_data_path"></a> [master\_user\_data\_path](#input\_master\_user\_data\_path) | n/a | `string` | `user_data.sh` | no |
 
 ## Outputs
 
