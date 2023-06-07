@@ -116,3 +116,4 @@ then
 fi
 
 systemctl start mongod.service
+${extended_user_data}

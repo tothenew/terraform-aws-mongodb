@@ -71,6 +71,7 @@ No modules.
 | <a name="input_secondary_node_type"></a> [secondary\_node\_type](#input\_secondary\_node\_type) | n/a | `any` | n/a | yes |
 | <a name="input_ssm_parameter_prefix"></a> [ssm\_parameter\_prefix](#input\_ssm\_parameter\_prefix) | n/a | `string` | `"MongoDB"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | n/a | `any` | n/a | yes |
+| <a name="input_extended_user_data_path"></a> [extended\_user\_data\_path](#input\_extended\_user\_data\_path) | Path to extended user data file which is used to append addtional script on the existing script from outside the module | `string` | `mongodb_userdata.sh ` | no |
 
 ## Outputs
 
