@@ -2,7 +2,7 @@ variable "region" {
   type = string
 }
 
-variable "master_user_data_path" {
+variable "extended_user_data_path" {
   description = "Path for userdata file"
   type = string
   default = ""
