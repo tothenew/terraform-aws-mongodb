@@ -119,7 +119,7 @@ data "template_file" "userdata" {
     environment          = var.environment
     ssm_parameter_prefix = var.ssm_parameter_prefix
     project_name         = var.project_name
-    master_user_data = file(var.master_user_data_path == "" ? "" : var.master_user_data_path)
+    extended_user_data = file(var.extended_user_data_path == "" ? "" : var.extended_user_data_path)
   }
 }
 
