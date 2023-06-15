@@ -1,6 +1,11 @@
-data "aws_ssm_parameter" "mongodb_endpoint" {
-  name = "/${var.environment}/MongoDB/MONGODB_HOST"
+output "mongo_primary_private_ip"{
+ value = aws_instance.mongo_primary.private_ip
 }
-output "mongodb_ip_address" {
-value = split(",", data.aws_ssm_parameter.mongodb_endpoint.value)
+
+output "secondary_private_ip" {
+  value = aws_instance.mongo_secondary[*].private_ip
+}
+
+output "mongo_security_group_id" {
+  value = aws_security_group.mongo_sg.id
 }
