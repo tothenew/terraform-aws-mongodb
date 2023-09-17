@@ -1,0 +1,18 @@
+common:
+  vpn_cidr: "10.1.0.0/16"
+
+workspaces:
+  nonprod-us-east-1-default:
+    aws:
+      account_id: 123456789
+      region: us-east-1
+    account_name: nonprod
+    project_name: test
+    project_name_prefix: test
+    vpc_id: "vpc-07e3c626b44400ee2"
+    mongo_subnet_id: "subnet-0d54d4e103d8c08c0"
+    mongo_database: admin
+    key_name: mongo
+    primary_node_type: "t2.micro"
+    secondary_node_type: "t2.micro"
+    mongo_ami: ami-053b0d53c279acc90
