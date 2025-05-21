@@ -5,10 +5,43 @@
 
 The following content needed to be created and managed:
  - Introduction
-     - Explaination of module 
-     - Intended users
- - Resource created and managed by this module
- - Example Usages
+     - This Terraform module automates the provisioning of a **MongoDB Replica Set** on AWS using EC2 instances. It handles everything from secure key generation to EBS volume attachment, replica set configuration, and SSM-based credential storage. The design ensures a secure, private, and production-aligned MongoDB deployment across multiple Availability Zones.
+
+ - This module creates and configures the following AWS resources:
+
+- `aws_instance` – EC2 instances for MongoDB nodes  
+- `aws_ebs_volume` and `aws_volume_attachment` – Storage volumes  
+- `aws_security_group` – Allow SSH (22), MongoDB (27017), and internal node communication  
+- `aws_ssm_parameter` – Securely stores MongoDB admin credentials  
+- `aws_iam_instance_profile` and `aws_iam_role` – Enables EC2 SSM connectivity  
+---
+
+## 💡 Example Usage
+
+```hcl
+module "mongodb_replica_set" {
+  source                = "./modules/mongodb-replicaset"
+  region                = "us-east-1"
+  mongo_ami             = "ami-0149b2da6ceec4bb0"
+  primary_node_type     = "t3.medium"
+  secondary_node_type   = "t3.small"
+  volume_type           = "gp3"
+  volume_size           = 50
+  vpc_id                = "vpc-12345678"
+  mongo_subnet_id       = "subnet-87654321"
+  mongo_database        = "admin"
+  mongo_username        = "admin"
+  key_name              = "mongo-keypair"
+  instance_user         = "ubuntu"
+  environment           = "dev"
+  replica_set_name      = "mongoRs"
+  num_secondary_nodes   = 2
+  domain_name           = ".test.internal"
+  ssm_parameter_prefix  = "MongoDB"
+  custom_domain         = false
+  project_name          = "irs-mongo"
+}
+
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
