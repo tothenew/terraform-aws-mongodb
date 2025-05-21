@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
+exec > >(tee -a /var/log/user-data.log) 2>&1
 
 # Mounting data volume
 sleep 120
