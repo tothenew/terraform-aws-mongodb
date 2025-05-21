@@ -14,18 +14,20 @@ echo "UUID=$blkid  /var/lib/mongodb  xfs  defaults,nofail  0  2" >> /etc/fstab
 apt-get update
 apt install awscli -y 
 
-
 # Allowing TCP Forwarding form SSH
 echo "AllowTcpForwarding yes" >> /etc/ssh/sshd_config
 systemctl restart ssh
 
-
 # Installing MongoDB and Python with Dependent Packages and Pip
 apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common -y
-wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+
+# New MongoDB 8.0 key and repo
+curl -fsSL https://pgp.mongodb.com/server-8.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+
 apt-get update
 apt-get install -y mongodb-org unzip python3-distutils jq build-essential python3-dev
+
 chown -R mongodb:mongodb /var/lib/mongodb
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
